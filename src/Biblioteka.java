@@ -1,4 +1,7 @@
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 
 public class Biblioteka {
@@ -81,7 +84,7 @@ public class Biblioteka {
 		}
 	}
 
-	public void vratiKnjigu(int brojRacuna, int brojKnjige) {
+	public void vratiKnjigu(int brojRacuna, int brojKnjige) throws Exception {
 		boolean validnoVracanje = false;
 		boolean validanRacun = false;
 
@@ -126,7 +129,22 @@ public class Biblioteka {
 		}
 	}
 
-	public void ispisDetaljaOKnjigama() {
+	public void ispisDetaljaOKnjigama() throws Exception {
+		
+		FileReader fajl = new FileReader ("Knjige.txt");
+		BufferedReader citanje = new BufferedReader (fajl);
+		
+		//String text = "";
+		String linija = citanje.readLine();
+				
+		while (linija != null) {
+			
+		System.out.println(linija);
+		linija = citanje.readLine();
+		
+		}
+				
+		
 		for (Knjiga e : listaKnjiga) {
 			System.out.println();
 			System.out.println("Broj knjige: " + e.getBrojKnjige());
