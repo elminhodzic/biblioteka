@@ -1,5 +1,6 @@
-1 neko nekic - "Mali mrav"
-2 niko nikic - "Velki mrav"
-3 svako svakic - "Srednji mrav"
-4 meho mehic - "Mini mrav"
-5 mujo mujic - "Ogromni mrav"
+1 
+emin
+2 
+elmo
+3 
+shemin

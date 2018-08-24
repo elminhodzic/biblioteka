@@ -1,6 +1,10 @@
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.NoSuchElementException;
 
 public class BibliotekaTest {
 
@@ -10,6 +14,9 @@ public class BibliotekaTest {
 
 		Biblioteka b = new Biblioteka();
 
+		//File fajl = new File("Knjige.txt");
+		//Scanner input = new Scanner(fajl);
+		
 		int opcija = 1;
 		int brojRacuna, brojKnjige;
 
@@ -25,7 +32,7 @@ public class BibliotekaTest {
 				opcija = unos.nextInt();
 				int opcija1 = unosOpcije(opcija);
 
-				if (opcija1 == 1) {
+				if (opcija == 1) {
 
 					System.out.println("Unesite broj racuna: ");
 					brojRacuna = unos.nextInt();
@@ -37,7 +44,9 @@ public class BibliotekaTest {
 
 					b.kreirajRacun(brojRacuna, ime);
 				}
-				if (opcija1 == 2) {
+				if (opcija == 2) {
+					
+					
 
 					System.out.println("Unesite broj knjige: ");
 					brojKnjige = unos.nextInt();
@@ -46,12 +55,14 @@ public class BibliotekaTest {
 
 					System.out.println("Unesite ime knjige: ");
 					String imeKnjige = unos.nextLine();
-
+	
 					b.kreirajKnjigu(brojKnjige, imeKnjige);
+					
 
+					
 				}
 
-				if (opcija1 == 3) {
+				if (opcija == 3) {
 
 					System.out.println("Unesite broj racuna: ");
 					brojRacuna = unos.nextInt();
@@ -65,61 +76,61 @@ public class BibliotekaTest {
 
 				}
 
-				if (opcija1 == 4) {
+				if (opcija == 4) {
 
 					boolean uspjesno = false;
-					
+
 					while (uspjesno)
-					try {
-					System.out.println("Unesite broj racuna: ");
-					brojRacuna = unos.nextInt();
+						try {
+							System.out.println("Unesite broj racuna: ");
+							brojRacuna = unos.nextInt();
 
-					unos.nextLine();
+							unos.nextLine();
 
-					System.out.println("Unesite broj knjige");
-					brojKnjige = unos.nextInt();
+							System.out.println("Unesite broj knjige");
+							brojKnjige = unos.nextInt();
 
-					b.vratiKnjigu(brojRacuna, brojKnjige);
-					
-					uspjesno = true;
-					
-					} catch (InputMismatchException ex) {
-						
-						System.out.println("Pogresan unos: ");
-						uspjesno = false;
-						
-						unos.nextLine();
-					}
+							b.vratiKnjigu(brojRacuna, brojKnjige);
+
+							uspjesno = true;
+
+						} catch (InputMismatchException ex) {
+
+							System.out.println("Pogresan unos: ");
+							uspjesno = false;
+
+							unos.nextLine();
+						}
 				}
 
-				if (opcija1 == 5) {
+				if (opcija == 5) {
 					System.out.println("Detalji o postojecim racunima: ");
 					b.ispisDetaljaORacunima();
 
 				}
 
-				if (opcija1 == 6) {
+				if (opcija == 6) {
 					System.out.println("Detalji o postojeæim knjigama: ");
 					b.ispisDetaljaOKnjigama();
 
 				}
-				
-				if (opcija1 == 0) {
-					
+
+				if (opcija == 0) {
+
 					System.exit(0);
 				}
-				
+
 			} catch (InputMismatchException ex) {
 
-				System.out.println("Pogresan unos: ");
+				System.out.println("1: ");
 
 				unos.nextLine();
 
-			}catch (IllegalArgumentException ex) {
-				
-				System.out.println("pogresan unos: ");
-				
-				unos.hasNextLine();
+			} catch (IllegalArgumentException ex) {
+
+				System.out.println("2: ");
+
+				unos.nextLine();
 			}
 		}
 		unos.close();
@@ -131,10 +142,11 @@ public class BibliotekaTest {
 
 			throw new IllegalArgumentException("Pogresan unos: ");
 		}
-		
 
 		return opcija;
 
 	}
+	
+	
 
 }

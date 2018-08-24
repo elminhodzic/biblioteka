@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.Date;
 
-public class Knjiga {
+public class Knjiga implements Serializable {
 
 	
 	private int brojKnjige;
@@ -11,12 +12,15 @@ public class Knjiga {
 	Knjiga() {
 
 	}
+	
 
 	public Knjiga(int brojKnjige, String imeKnjige) {
 		this.brojKnjige = brojKnjige;
 		this.imeKnjige = imeKnjige;
 
 	}
+	
+	
 
 	public Knjiga(int brojKnjige, String imeKnjige, boolean status) {
 		this(brojKnjige, imeKnjige);

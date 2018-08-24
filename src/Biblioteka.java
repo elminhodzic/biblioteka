@@ -1,12 +1,27 @@
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Formatter;
 
 public class Biblioteka {
+	
 	ArrayList<Racun> listaRacuna = new ArrayList<>();
 	ArrayList<Knjiga> listaKnjiga = new ArrayList<>();
+	
+	
 
 	public void kreirajRacun(int brojRacuna, String imeKorisnika) {
 		Racun racun = new Racun(brojRacuna, imeKorisnika);
@@ -24,26 +39,62 @@ public class Biblioteka {
 		if (validanRacun) {
 			listaRacuna.add(racun);
 			System.out.println("Uspijesno ste kreirali racun.");
+			
 		}
+		
+		try{
+			
+			
+			File fajl = new File ("Knjige.txt");
+			FileWriter fw = new FileWriter (fajl);
+			Writer ispis = new BufferedWriter (fw);
+			
+			for (Racun e : listaRacuna) {
+				
+				ispis.write(e.getBrojRacuna() + " \n" + e.getIme() + "\n");
+			
+			}
+				
+			
+				
+			
+			ispis.close();
+			}catch(Exception ex) {
+				System.out.println("nema fajla:");
+			}
+		
+		
+		
 	}
 
-	public void kreirajKnjigu(int brojKnjige, String imeKnjige) {
+	public void kreirajKnjigu(int brojKnjige, String imeKnjige)  {
+
 		Knjiga knjiga = new Knjiga(brojKnjige, imeKnjige);
+
 		boolean validnaKnjiga = true;
+		
+
 		for (Knjiga e : listaKnjiga) {
+
 			if (e.getBrojKnjige() == brojKnjige) {
+
 				validnaKnjiga = false;
 				System.out.println("Knjiga sa brojem " + brojKnjige + " vec postoji.");
 			}
 		}
+
 		if (brojKnjige < 0) {
 			validnaKnjiga = false;
 			System.out.println("Nije moguce kreirati knjigu sa negativnim brojem.");
 		}
+
 		if (validnaKnjiga) {
 			listaKnjiga.add(knjiga);
 			System.out.println("Uspjesno ste kreirali knjigu.");
+			
+			
 		}
+		
 	}
 
 	public void podigniKnjigu(int brojRacuna, int brojKnjige) {
@@ -78,7 +129,7 @@ public class Biblioteka {
 					index = listaRacuna.indexOf(e);
 				}
 			}
-			System.out.println("Knjiga uspijesno izdata korisniku "+listaRacuna.get(index).getIme());
+			System.out.println("Knjiga uspijesno izdata korisniku " + listaRacuna.get(index).getIme());
 		} else {
 			System.out.println("Knjiga se ne može izdati.");
 		}
@@ -125,25 +176,12 @@ public class Biblioteka {
 			System.out.println("Broj racuna: " + e.getBrojRacuna());
 			System.out.println("Ime: " + e.getIme());
 			System.out.println("Broj knjiga: " + e.getBrojKnjiga());
-			
+
 		}
 	}
 
 	public void ispisDetaljaOKnjigama() throws Exception {
-		
-		FileReader fajl = new FileReader ("Knjige.txt");
-		BufferedReader citanje = new BufferedReader (fajl);
-		
-		//String text = "";
-		String linija = citanje.readLine();
-				
-		while (linija != null) {
-			
-		System.out.println(linija);
-		linija = citanje.readLine();
-		
-		}
-				
+
 		
 		for (Knjiga e : listaKnjiga) {
 			System.out.println();
@@ -155,5 +193,27 @@ public class Biblioteka {
 				System.out.println("Knjiga nije izdata.");
 			}
 		}
+
 	}
+
+	public void upusUFajl(int brojKnjige, String imeKnjige) {
+		// TODO Auto-generated method stub
+		File fajl = new File("Knjige.txt");
+		try {
+			
+		
+		PrintWriter upisUFajl = new PrintWriter(fajl);
+		
+		upisUFajl.print (brojKnjige + " ");
+		upisUFajl.print (imeKnjige);
+		upisUFajl.close();
+		
+		}
+		catch (IOException ex) {
+			
+			System.out.println("greska: ");
+		}
+	}
+
+	
 }
