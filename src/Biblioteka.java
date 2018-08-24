@@ -45,19 +45,16 @@ public class Biblioteka {
 		try{
 			
 			
-			File fajl = new File ("Knjige.txt");
+			File fajl = new File ("Racuni.txt");
 			FileWriter fw = new FileWriter (fajl);
 			Writer ispis = new BufferedWriter (fw);
 			
 			for (Racun e : listaRacuna) {
 				
-				ispis.write(e.getBrojRacuna() + " \n" + e.getIme() + "\n");
-			
+				ispis.write(e.racuni().toString());
+				
+				
 			}
-				
-			
-				
-			
 			ispis.close();
 			}catch(Exception ex) {
 				System.out.println("nema fajla:");
@@ -94,6 +91,24 @@ public class Biblioteka {
 			
 			
 		}
+		
+try{
+			
+			
+			File fajl = new File ("Knjige.txt");
+			FileWriter fw = new FileWriter (fajl);
+			Writer ispis = new BufferedWriter (fw);
+			
+			for (Racun e : listaRacuna) {
+				
+				ispis.write(e.racuni().toString());
+				
+				
+			}
+			ispis.close();
+			}catch(Exception ex) {
+				System.out.println("nema fajla:");
+			}
 		
 	}
 

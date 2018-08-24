@@ -63,5 +63,7 @@ public class Knjiga implements Serializable {
 	public String toString() {
 		return "Knjiga [brojKnjige=" + brojKnjige + ", imeKnjige=" + imeKnjige + ", status=" + status
 				+ ", datumPosudnjivanja=" + datumPosudnjivanja + "]";
+		
+		
 	}
 }

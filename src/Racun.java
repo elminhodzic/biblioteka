@@ -43,5 +43,10 @@ public class Racun {
 	public void setBrojKnjiga(int brojKnjiga) {
 		this.brojKnjiga = brojKnjiga;
 	}
+	
+	public String racuni () {
+		
+		return brojRacuna + " " + ime + "\n";
+	}
 
 }
