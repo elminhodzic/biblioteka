@@ -14,17 +14,24 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Formatter;
+import java.util.Iterator;
 
 public class Biblioteka {
-	
+
 	ArrayList<Racun> listaRacuna = new ArrayList<>();
 	ArrayList<Knjiga> listaKnjiga = new ArrayList<>();
-	
-	
+	ArrayList<DetaljiORacunimaIKnjigama> listaDetalji = new ArrayList<>();
+	DetaljiORacunimaIKnjigama detalji = new DetaljiORacunimaIKnjigama();
 
 	public void kreirajRacun(int brojRacuna, String imeKorisnika) {
 		Racun racun = new Racun(brojRacuna, imeKorisnika);
+		
+		//(glupost)
+		// DetaljiORacunimaIKnjigama detalji = new DetaljiORacunimaIKnjigama(brojRacuna,
+		// imeKorisnika);
+
 		boolean validanRacun = true;
 		for (Racun e : listaRacuna) {
 			if (e.getBrojRacuna() == brojRacuna) {
@@ -38,38 +45,38 @@ public class Biblioteka {
 		}
 		if (validanRacun) {
 			listaRacuna.add(racun);
+			// listaDetalji.add(detalji);
 			System.out.println("Uspijesno ste kreirali racun.");
-			
+
 		}
-		
-		try{
-			
-			
-			File fajl = new File ("Racuni.txt");
-			FileWriter fw = new FileWriter (fajl);
-			Writer ispis = new BufferedWriter (fw);
-			
+
+		try {
+
+			File fajl1 = new File("Racuni.txt");
+			PrintWriter pw1 = new PrintWriter(fajl1);
+
 			for (Racun e : listaRacuna) {
-				
-				ispis.write(e.racuni().toString());
-				
-				
+
+				pw1.println(e.getBrojRacuna() + " " + e.getIme());
+				System.out.println();
 			}
-			ispis.close();
-			}catch(Exception ex) {
-				System.out.println("nema fajla:");
-			}
-		
-		
-		
+			pw1.close();
+
+		} catch (Exception ex) {
+			System.out.println("nema fajla:");
+		}
+
 	}
 
-	public void kreirajKnjigu(int brojKnjige, String imeKnjige)  {
+	public void kreirajKnjigu(int brojKnjige, String imeKnjige) {
 
 		Knjiga knjiga = new Knjiga(brojKnjige, imeKnjige);
+		
+		//(glupost)
+		// DetaljiORacunimaIKnjigama detalji = new DetaljiORacunimaIKnjigama(brojKnjige,
+		// imeKnjige);
 
 		boolean validnaKnjiga = true;
-		
 
 		for (Knjiga e : listaKnjiga) {
 
@@ -87,29 +94,26 @@ public class Biblioteka {
 
 		if (validnaKnjiga) {
 			listaKnjiga.add(knjiga);
+			// listaDetalji.add(detalji);
 			System.out.println("Uspjesno ste kreirali knjigu.");
-			
-			
+
 		}
-		
-try{
-			
-			
-			File fajl = new File ("Knjige.txt");
-			FileWriter fw = new FileWriter (fajl);
-			Writer ispis = new BufferedWriter (fw);
-			
-			for (Racun e : listaRacuna) {
-				
-				ispis.write(e.racuni().toString());
-				
-				
+
+		try {
+
+			File fajl2 = new File("Knjige.txt");
+			PrintWriter pw2 = new PrintWriter(fajl2);
+
+			for (Knjiga e : listaKnjiga) {
+
+				pw2.println(e.getBrojKnjige() + " " + e.getImeKnjige());
+
 			}
-			ispis.close();
-			}catch(Exception ex) {
-				System.out.println("nema fajla:");
-			}
-		
+			pw2.close();
+		} catch (Exception ex) {
+			System.out.println("nema fajla:");
+		}
+
 	}
 
 	public void podigniKnjigu(int brojRacuna, int brojKnjige) {
@@ -124,7 +128,7 @@ try{
 					System.out.println("Knjiga je vec izdata.");
 				}
 				for (Racun r : listaRacuna) {
-					if (r.getBrojRacuna() == brojRacuna && r.getBrojKnjiga() < 3) {
+					if (r.getBrojRacuna() == brojRacuna && r.getBrojKnjige() < 3) {
 						validanRacun = true;
 					}
 				}
@@ -137,13 +141,26 @@ try{
 					e.setStatus(true);
 					e.setDatumPosudnjivanja(datumPosudjivanja);
 				}
+
 			}
 			for (Racun e : listaRacuna) {
 				if (e.getBrojRacuna() == brojRacuna) {
-					e.setBrojKnjiga(e.getBrojKnjiga() + 1);
+					e.setBrojKnjige(e.getBrojKnjige() + 1);
 					index = listaRacuna.indexOf(e);
 				}
+
 			}
+
+			for (DetaljiORacunimaIKnjigama e : listaDetalji) {
+
+				if (e.getBrojRacuna() == brojRacuna && e.getBrojKnjiga() == brojKnjige) {
+
+					e.setBrojRacuna(brojRacuna);
+					e.setBrojKnjiga(brojKnjige);
+				}
+
+			}
+
 			System.out.println("Knjiga uspijesno izdata korisniku " + listaRacuna.get(index).getIme());
 		} else {
 			System.out.println("Knjiga se ne može izdati.");
@@ -176,7 +193,7 @@ try{
 			}
 			for (Racun e : listaRacuna) {
 				if (e.getBrojRacuna() == brojRacuna) {
-					e.setBrojKnjiga(e.getBrojKnjiga() - 1);
+					e.setBrojKnjige(e.getBrojKnjige() - 1);
 				}
 			}
 			System.out.println("Knjiga uspijesno vracena");
@@ -185,19 +202,102 @@ try{
 		}
 	}
 
-	public void ispisDetaljaORacunima() {
+	public void ispisDetaljaORacunima() throws FileNotFoundException {
+
 		for (Racun e : listaRacuna) {
 			System.out.println();
 			System.out.println("Broj racuna: " + e.getBrojRacuna());
 			System.out.println("Ime: " + e.getIme());
-			System.out.println("Broj knjiga: " + e.getBrojKnjiga());
+			System.out.println("Broj knjiga: " + e.getBrojKnjige());
 
 		}
+
+	/*	(glupost)
+	 * 
+	 * try {
+
+			File fajl1 = new File("Detalji_O_Racunima.txt");
+			PrintWriter pw = new PrintWriter(fajl1);
+
+			for (Racun e : listaRacuna) {
+
+				pw.println(e.getBrojRacuna() + " " + e.getIme() + " (" + e.getBrojKnjiga() + " " + e.getImeKnjige()
+						+ ") ");
+				System.out.println();
+			}
+			pw.close();
+
+		} catch (Exception ex) {
+			System.out.println("nema fajla:");
+		}
+*/
+	}
+
+	public void DetaljiORacunima(int brojRacuna, String ime, int brojKnjige, String imeKnjige) throws FileNotFoundException {
+
+		java.util.Date datumPosudjivanja2 = new java.util.Date();
+		int index2 = 0;
+		
+		boolean validnoVracanje = false;
+		boolean validanRacun = false;
+
+		for (Knjiga e : listaKnjiga) {
+			if (e.getBrojKnjige() == brojKnjige) {
+				validnoVracanje = true;
+				if (!e.isStatus()) {
+					validnoVracanje = false;
+					System.out.println("Knjiga nije izdata korisniku.");
+				}
+				for (Racun r : listaRacuna) {
+					if (r.getBrojRacuna() == brojRacuna) {
+						validanRacun = true;
+					}
+				}
+			}
+		}
+		if (validanRacun && validnoVracanje) {
+		
+		for (Knjiga e : listaKnjiga) {
+			if (e.getBrojKnjige() == brojKnjige) {
+				e.setStatus(true);
+				e.setDatumPosudnjivanja(datumPosudjivanja2);
+			}
+
+		}
+		for (Racun e : listaRacuna) {
+			if (e.getBrojRacuna() == brojRacuna) {
+				e.setBrojKnjige(e.getBrojKnjige() + 1);
+				index2 = listaRacuna.indexOf(e);
+				e.setIme(ime);
+				e.setBrojKnjige(brojKnjige);
+				e.setImeKnjige(imeKnjige);
+			}
+
+		}
+		
+		}
+		
+		try {
+
+			File fajl1 = new File("Detalji_O_Racunima.txt");
+			PrintWriter pw = new PrintWriter(fajl1);
+
+			for (Racun e : listaRacuna) {
+
+				pw.println(e.getBrojRacuna() + " " + e.getIme() + " (" + e.getBrojKnjige() + " " + e.getImeKnjige()
+						+ ") ");
+				System.out.println();
+			}
+			pw.close();
+
+		} catch (Exception ex) {
+			System.out.println("nema fajla:");
+		}
+
 	}
 
 	public void ispisDetaljaOKnjigama() throws Exception {
 
-		
 		for (Knjiga e : listaKnjiga) {
 			System.out.println();
 			System.out.println("Broj knjige: " + e.getBrojKnjige());
@@ -211,24 +311,42 @@ try{
 
 	}
 
-	public void upusUFajl(int brojKnjige, String imeKnjige) {
-		// TODO Auto-generated method stub
-		File fajl = new File("Knjige.txt");
+	
+	// (jos jedna glupost pokusaj necega al nek bude i ovo tu bit ce izbrisano)
+	public void Detalji() throws FileNotFoundException {
+
+		DetaljiORacunimaIKnjigama detalji = new DetaljiORacunimaIKnjigama();
+
 		try {
-			
-		
-		PrintWriter upisUFajl = new PrintWriter(fajl);
-		
-		upisUFajl.print (brojKnjige + " ");
-		upisUFajl.print (imeKnjige);
-		upisUFajl.close();
-		
+
+			File fajl3 = new File("Detalji.txt");
+			PrintWriter pw11 = new PrintWriter(fajl3);
+
+			for (Racun e : listaRacuna) {
+
+				pw11.println(e.getBrojRacuna() + " " + e.getIme() + " " + e.getBrojKnjige() + " " + e.getImeKnjige());
+
+			}
+
+			pw11.close();
+
+		} catch (Exception ex) {
+			System.out.println("nema fajla:");
 		}
-		catch (IOException ex) {
-			
-			System.out.println("greska: ");
-		}
+
+		/* (neka glupost al nek bude tu za sada) nevolim brista stvari dok program nije gotov kasnije ih se rijesim
+		 * File fajl = new File("Knjige.txt"); try {
+		 * 
+		 * 
+		 * PrintWriter upisUFajl = new PrintWriter(fajl);
+		 * 
+		 * upisUFajl.print (brojKnjige + " "); upisUFajl.print (imeKnjige);
+		 * upisUFajl.close();
+		 * 
+		 * } catch (IOException ex) {
+		 * 
+		 * System.out.println("greska: "); }
+		 */
 	}
 
-	
 }
