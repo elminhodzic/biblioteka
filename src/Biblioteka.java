@@ -1,22 +1,8 @@
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.EOFException;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Formatter;
-import java.util.Iterator;
+import java.util.Date;
 
 public class Biblioteka {
 
@@ -25,42 +11,44 @@ public class Biblioteka {
 	ArrayList<DetaljiORacunimaIKnjigama> listaDetalji = new ArrayList<>();
 	DetaljiORacunimaIKnjigama detalji = new DetaljiORacunimaIKnjigama();
 
+	boolean ispravnost = false;
+
 	public void kreirajRacun(int brojRacuna, String imeKorisnika) {
 		Racun racun = new Racun(brojRacuna, imeKorisnika);
-		
-		//(glupost)
-		// DetaljiORacunimaIKnjigama detalji = new DetaljiORacunimaIKnjigama(brojRacuna,
-		// imeKorisnika);
 
 		boolean validanRacun = true;
+
 		for (Racun e : listaRacuna) {
+
 			if (e.getBrojRacuna() == brojRacuna) {
 				validanRacun = false;
 				System.out.println("Racun sa brojem " + brojRacuna + " vec postoji.");
+
 			}
 		}
+
 		if (brojRacuna < 0) {
 			validanRacun = false;
 			System.out.println("Nije moguce kreirati racun sa negativnim brojem.");
 		}
+
 		if (validanRacun) {
 			listaRacuna.add(racun);
-			// listaDetalji.add(detalji);
 			System.out.println("Uspijesno ste kreirali racun.");
 
 		}
 
 		try {
 
-			File fajl1 = new File("Racuni.txt");
-			PrintWriter pw1 = new PrintWriter(fajl1);
+			File fajlRacuni = new File("Racuni.txt");
+			PrintWriter printanjeRacuni = new PrintWriter(fajlRacuni);
 
 			for (Racun e : listaRacuna) {
 
-				pw1.println(e.getBrojRacuna() + " " + e.getIme());
+				printanjeRacuni.println(e.getBrojRacuna() + " " + e.getIme());
 				System.out.println();
 			}
-			pw1.close();
+			printanjeRacuni.close();
 
 		} catch (Exception ex) {
 			System.out.println("nema fajla:");
@@ -69,12 +57,7 @@ public class Biblioteka {
 	}
 
 	public void kreirajKnjigu(int brojKnjige, String imeKnjige) {
-
 		Knjiga knjiga = new Knjiga(brojKnjige, imeKnjige);
-		
-		//(glupost)
-		// DetaljiORacunimaIKnjigama detalji = new DetaljiORacunimaIKnjigama(brojKnjige,
-		// imeKnjige);
 
 		boolean validnaKnjiga = true;
 
@@ -94,39 +77,44 @@ public class Biblioteka {
 
 		if (validnaKnjiga) {
 			listaKnjiga.add(knjiga);
-			// listaDetalji.add(detalji);
 			System.out.println("Uspjesno ste kreirali knjigu.");
 
 		}
 
 		try {
 
-			File fajl2 = new File("Knjige.txt");
-			PrintWriter pw2 = new PrintWriter(fajl2);
+			File fajlKnjiga = new File("Knjige.txt");
+			PrintWriter printanjeKnjiga = new PrintWriter(fajlKnjiga);
 
 			for (Knjiga e : listaKnjiga) {
 
-				pw2.println(e.getBrojKnjige() + " " + e.getImeKnjige());
+				printanjeKnjiga.println(e.getBrojKnjige() + " " + e.getImeKnjige());
 
 			}
-			pw2.close();
+			printanjeKnjiga.close();
+
 		} catch (Exception ex) {
 			System.out.println("nema fajla:");
 		}
 
 	}
 
-	public void podigniKnjigu(int brojRacuna, int brojKnjige) {
+	public void podigniKnjigu(int brojRacuna, int brojKnjige) throws FileNotFoundException {
 		boolean validnoPodizanje = false;
 		boolean validanRacun = false;
 		int index = 0;
+
 		for (Knjiga e : listaKnjiga) {
+
 			if (e.getBrojKnjige() == brojKnjige) {
 				validnoPodizanje = true;
+
 				if (e.isStatus()) {
+
 					validnoPodizanje = false;
 					System.out.println("Knjiga je vec izdata.");
 				}
+
 				for (Racun r : listaRacuna) {
 					if (r.getBrojRacuna() == brojRacuna && r.getBrojKnjige() < 3) {
 						validanRacun = true;
@@ -134,32 +122,45 @@ public class Biblioteka {
 				}
 			}
 		}
-		if (validanRacun && validnoPodizanje) {
-			java.util.Date datumPosudjivanja = new java.util.Date();
-			for (Knjiga e : listaKnjiga) {
-				if (e.getBrojKnjige() == brojKnjige) {
-					e.setStatus(true);
-					e.setDatumPosudnjivanja(datumPosudjivanja);
-				}
 
-			}
+		if (validanRacun && validnoPodizanje) {
+			Date datumPosudjivanja = new Date();
+
+			File opsti = new File("opsti.txt");
+			PrintWriter printanjeOpsti = new PrintWriter(opsti);
+
+			
+			
 			for (Racun e : listaRacuna) {
+
 				if (e.getBrojRacuna() == brojRacuna) {
+
 					e.setBrojKnjige(e.getBrojKnjige() + 1);
 					index = listaRacuna.indexOf(e);
+					
+					//printanjeOpsti.print(e.getBrojRacuna() + " " + e.getIme() + " ");
+					printanjeOpsti.write(e.getBrojRacuna() + " " + e.getIme() + " ");
 				}
 
 			}
 
-			for (DetaljiORacunimaIKnjigama e : listaDetalji) {
+			
+			for (Knjiga e : listaKnjiga) {
 
-				if (e.getBrojRacuna() == brojRacuna && e.getBrojKnjiga() == brojKnjige) {
+				if (e.getBrojKnjige() == brojKnjige) {
 
-					e.setBrojRacuna(brojRacuna);
-					e.setBrojKnjiga(brojKnjige);
+					e.setStatus(true);
+					e.setDatumPosudnjivanja(datumPosudjivanja);
+					
+					printanjeOpsti.write(e.getBrojKnjige() + " " + e.getImeKnjige() + " " + e.getDatumPosudnjivanja());
+					System.out.println();
+					
+					
 				}
 
 			}
+			System.out.println();
+			printanjeOpsti.close();
 
 			System.out.println("Knjiga uspijesno izdata korisniku " + listaRacuna.get(index).getIme());
 		} else {
@@ -172,30 +173,42 @@ public class Biblioteka {
 		boolean validanRacun = false;
 
 		for (Knjiga e : listaKnjiga) {
+
 			if (e.getBrojKnjige() == brojKnjige) {
+
 				validnoVracanje = true;
+
 				if (!e.isStatus()) {
+
 					validnoVracanje = false;
 					System.out.println("Knjiga nije izdata korisniku.");
 				}
+
 				for (Racun r : listaRacuna) {
+
 					if (r.getBrojRacuna() == brojRacuna) {
 						validanRacun = true;
 					}
 				}
 			}
 		}
+
 		if (validanRacun && validnoVracanje) {
+
 			for (Knjiga e : listaKnjiga) {
+
 				if (e.getBrojKnjige() == brojKnjige) {
 					e.setStatus(false);
 				}
 			}
+
 			for (Racun e : listaRacuna) {
+
 				if (e.getBrojRacuna() == brojRacuna) {
 					e.setBrojKnjige(e.getBrojKnjige() - 1);
 				}
 			}
+
 			System.out.println("Knjiga uspijesno vracena");
 		} else {
 			System.out.println("Pogresan unos.");
@@ -210,88 +223,6 @@ public class Biblioteka {
 			System.out.println("Ime: " + e.getIme());
 			System.out.println("Broj knjiga: " + e.getBrojKnjige());
 
-		}
-
-	/*	(glupost)
-	 * 
-	 * try {
-
-			File fajl1 = new File("Detalji_O_Racunima.txt");
-			PrintWriter pw = new PrintWriter(fajl1);
-
-			for (Racun e : listaRacuna) {
-
-				pw.println(e.getBrojRacuna() + " " + e.getIme() + " (" + e.getBrojKnjiga() + " " + e.getImeKnjige()
-						+ ") ");
-				System.out.println();
-			}
-			pw.close();
-
-		} catch (Exception ex) {
-			System.out.println("nema fajla:");
-		}
-*/
-	}
-
-	public void DetaljiORacunima(int brojRacuna, String ime, int brojKnjige, String imeKnjige) throws FileNotFoundException {
-
-		java.util.Date datumPosudjivanja2 = new java.util.Date();
-		int index2 = 0;
-		
-		boolean validnoVracanje = false;
-		boolean validanRacun = false;
-
-		for (Knjiga e : listaKnjiga) {
-			if (e.getBrojKnjige() == brojKnjige) {
-				validnoVracanje = true;
-				if (!e.isStatus()) {
-					validnoVracanje = false;
-					System.out.println("Knjiga nije izdata korisniku.");
-				}
-				for (Racun r : listaRacuna) {
-					if (r.getBrojRacuna() == brojRacuna) {
-						validanRacun = true;
-					}
-				}
-			}
-		}
-		if (validanRacun && validnoVracanje) {
-		
-		for (Knjiga e : listaKnjiga) {
-			if (e.getBrojKnjige() == brojKnjige) {
-				e.setStatus(true);
-				e.setDatumPosudnjivanja(datumPosudjivanja2);
-			}
-
-		}
-		for (Racun e : listaRacuna) {
-			if (e.getBrojRacuna() == brojRacuna) {
-				e.setBrojKnjige(e.getBrojKnjige() + 1);
-				index2 = listaRacuna.indexOf(e);
-				e.setIme(ime);
-				e.setBrojKnjige(brojKnjige);
-				e.setImeKnjige(imeKnjige);
-			}
-
-		}
-		
-		}
-		
-		try {
-
-			File fajl1 = new File("Detalji_O_Racunima.txt");
-			PrintWriter pw = new PrintWriter(fajl1);
-
-			for (Racun e : listaRacuna) {
-
-				pw.println(e.getBrojRacuna() + " " + e.getIme() + " (" + e.getBrojKnjige() + " " + e.getImeKnjige()
-						+ ") ");
-				System.out.println();
-			}
-			pw.close();
-
-		} catch (Exception ex) {
-			System.out.println("nema fajla:");
 		}
 
 	}
@@ -311,42 +242,37 @@ public class Biblioteka {
 
 	}
 
-	
-	// (jos jedna glupost pokusaj necega al nek bude i ovo tu bit ce izbrisano)
-	public void Detalji() throws FileNotFoundException {
+	public void nekiDetalji() throws FileNotFoundException {
 
-		DetaljiORacunimaIKnjigama detalji = new DetaljiORacunimaIKnjigama();
+		File fajlDetalji = new File("detaljcici.txt");
+		PrintWriter p = new PrintWriter(fajlDetalji);
 
-		try {
+		p.println("broj racuna " + "     ime musterije   " + "     broj Knjige   " + "      ime Knjige    "
+				+ "      datum podiznja");
 
-			File fajl3 = new File("Detalji.txt");
-			PrintWriter pw11 = new PrintWriter(fajl3);
+		if (ispravnost) {
 
 			for (Racun e : listaRacuna) {
 
-				pw11.println(e.getBrojRacuna() + " " + e.getIme() + " " + e.getBrojKnjige() + " " + e.getImeKnjige());
-
+				p.print(e.getBrojRacuna() + " " + e.getIme() + " ");
 			}
 
-			pw11.close();
+			for (Knjiga e : listaKnjiga) {
 
-		} catch (Exception ex) {
-			System.out.println("nema fajla:");
+				p.print(e.getBrojKnjige() + " " + e.getImeKnjige() + " ");
+
+				if (e.isStatus()) {
+					p.print(e.getDatumPosudnjivanja());
+
+				} else {
+
+					System.out.println("Knjiga nije izdata.");
+				}
+			}
+			System.out.println();
+
 		}
-
-		/* (neka glupost al nek bude tu za sada) nevolim brista stvari dok program nije gotov kasnije ih se rijesim
-		 * File fajl = new File("Knjige.txt"); try {
-		 * 
-		 * 
-		 * PrintWriter upisUFajl = new PrintWriter(fajl);
-		 * 
-		 * upisUFajl.print (brojKnjige + " "); upisUFajl.print (imeKnjige);
-		 * upisUFajl.close();
-		 * 
-		 * } catch (IOException ex) {
-		 * 
-		 * System.out.println("greska: "); }
-		 */
+		p.close();
 	}
 
 }

@@ -1,10 +1,6 @@
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.NoSuchElementException;
 
 public class BibliotekaTest {
 
@@ -46,10 +42,10 @@ public class BibliotekaTest {
 					String ime = unos.nextLine();
 
 					b.kreirajRacun(brojRacuna, ime);
-					System.out.println("Unesite broj \" 1 \" da bi sacuvali podatke: ");
-					int operacija1 = unos.nextInt();
+					//System.out.println("Unesite broj \" 1 \" da bi sacuvali podatke: ");
+					//int operacija1 = unos.nextInt();
 
-					b.Detalji();
+					//b.Detalji();
 
 				}
 				if (opcija == 2) {
@@ -67,10 +63,10 @@ public class BibliotekaTest {
 					// ovo ce bit obrisano dok nadjem nacin da radi program kako treba u sustni sa
 					// ovim zellim da sve podatke koje unesem poslozim u jedan fajl koji ce ispisat
 					// sve detalje o racunima knjigama i ostalim stvarima sve na jednom mjestu
-					System.out.println("Unesite broj \" 1 \" da bi sacuvali podatke: ");
-					int operacija2 = unos.nextInt();
+				//	System.out.println("Unesite broj \" 1 \" da bi sacuvali podatke: ");
+				//	int operacija2 = unos.nextInt();
 
-					b.Detalji();
+				//	b.Detalji();
 
 				}
 
@@ -125,6 +121,11 @@ public class BibliotekaTest {
 					System.out.println("Detalji o postojeæim knjigama: ");
 					b.ispisDetaljaOKnjigama();
 
+				}
+				
+				if (opcija == 7) {
+					
+					b.nekiDetalji();
 				}
 
 				if (opcija == 0) {
